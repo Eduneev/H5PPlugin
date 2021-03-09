@@ -48,7 +48,7 @@ $course = $DB->get_record('course', array('id' => $cm->course));
 if (!$course) {
     print_error('coursemisconf');
 }
-
+/*
 try {
     require_course_login($course, true, $cm, true, true);
 } catch (Exception $e) {
@@ -68,6 +68,7 @@ try {
          '</body>';
     return;
 }
+*/
 $context = context_module::instance($cm->id);
 require_capability('mod/hvp:view', $context);
 

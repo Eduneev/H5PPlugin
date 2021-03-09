@@ -89,7 +89,7 @@
     // Check if loading is complete
     if (  iframeDoc.readyState  == 'complete' ) {
 
-        iframe.setAttribute('allowFullScreen', '');
+        //iframe.setAttribute('allowFullScreen', '');
         //iframe.contentWindow.alert("Hello");
         /*
         iframe.contentWindow.onload = function(){
@@ -110,7 +110,6 @@
   }
 
   function postLoading(iframeH5P) {
-    iframeH5P.setAttribute('allowFullScreen', '')
     for (var instance of iframeH5P.instances){
       var vid = instance.video;
       vid.on('stateChange', function (event) {
