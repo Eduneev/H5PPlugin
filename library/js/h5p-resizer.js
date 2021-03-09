@@ -117,7 +117,7 @@
           case iframeH5P.Video.ENDED:
           endtime = new Date().getTime();
           console.log('ended => '+ endtime);
-          addTime();
+          //addTime();
           if(videoTimeout) clearTimeout(videoTimeout);	
           break;
         
@@ -236,10 +236,12 @@
     console.log("INSIDE ADDTIME");
     var now = new Date().getTime();    
     stoptime = (stoptime != '' ) ? stoptime : now;
+    /*
     if (endtime) {
 			timespent = Math.abs( ( parseInt(endtime) - parseInt(starttime) ) / 1000 );
     }
-		else if ( starttime < stoptime) {
+    */
+		if ( starttime < stoptime) {
 			timespent = timespent + Math.abs( ( parseInt(stoptime) - parseInt(starttime) ) / 1000 );
 			starttime = 0;			
 		}		
@@ -255,13 +257,17 @@
 
     var courseid = parseInt(document.getElementById("extra-data").getAttribute('courseid'));
     var userid = parseInt(document.getElementById("extra-data").getAttribute('userid'));
+    var cm = parseInt(document.getElementById("extra-data").getAttribute('cm'));
+    var cm_name = parseInt(document.getElementById("extra-data").getAttribute('cm_name'));
     		
 		var data = {
 			wstoken: 'b81f5e684fbf38b8af50ff0bf226f714',
       wsfunction: 'local_vpt_addUserTime_mobile',      
 			courseid: courseid,
 			userid: userid,
-			timespent: Math.ceil(timespent),	
+      timespent: Math.ceil(timespent),
+      cm: cm,
+      cm_name: cm_name
 		}
 		
 		var url = 'https://enlp.in/webservice/rest/server.php?' + 
@@ -270,7 +276,9 @@
         'moodlewsrestformat=json' + '&' +
 				'courseid=' + data.courseid + '&' + 
 				'userid=' + data.userid + '&' + 
-				'timespent=' + data.timespent; 
+        'timespent=' + data.timespent + '&' +
+        'cm=' + data.cm + '&' + 
+        'cm_name=' + data.cm_name;
 		
 		timespent= 0;
 
