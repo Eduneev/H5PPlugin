@@ -83,7 +83,9 @@ class mobile {
             'wwwroot' => $CFG->wwwroot,
             'user_id' => $USER->id,
             'secret'  => urlencode($secret),
-            'courseid' => $cm->course
+            'courseid' => $cm->course,
+            'cm' => $cmid,
+            'cm_name' => $cm->name
         ];
 
         return array(
@@ -94,7 +96,7 @@ class mobile {
                 ),
             ),
             'javascript' => file_get_contents($CFG->dirroot . '/mod/hvp/library/js/h5p-resizer.js'),
-            'otherdata' => array('userid' => $USER->id, 'courseid' => $cm->course)
+            'otherdata' => array('userid' => $USER->id, 'courseid' => $cm->course, 'cm' => $cmid, 'cm_name' => $cm->name)
         );
     }
 }
