@@ -117,12 +117,17 @@
           case iframeH5P.Video.ENDED:
           endtime = new Date().getTime();
           console.log('ended => '+ endtime);
-          //addTime();
+          addTime();
           if(videoTimeout) clearTimeout(videoTimeout);	
           break;
         
           case iframeH5P.Video.PLAYING:
-          starttime = new Date().getTime();
+          // Do not change start time if caused due to buffering
+						if (!starttime || starttime == 0) 
+            starttime = new Date().getTime();
+          else 
+            console.log("Not setting new starttime.");
+
           console.log('play => '+ starttime);
           if (available_time > 0) {
             if(videoTimeout) clearTimeout(videoTimeout);
@@ -214,7 +219,7 @@
 	window.addEventListener("beforeunload", function (e) {
 	  	// var confirmationMessage = "\o/";
 	  	console.log(starttime)
-	  	if (starttime) {
+	  	if (starttime && starttime > 0) {
 			stoptime = new Date().getTime();
 			return addTime();
 		}
@@ -236,12 +241,12 @@
     console.log("INSIDE ADDTIME");
     var now = new Date().getTime();    
     stoptime = (stoptime != '' ) ? stoptime : now;
-    /*
-    if (endtime) {
-			timespent = Math.abs( ( parseInt(endtime) - parseInt(starttime) ) / 1000 );
+    
+    if (endtime && starttime != 0) {
+      timespent = Math.abs( ( parseInt(endtime) - parseInt(starttime) ) / 1000 );
+      starttime = 0;
     }
-    */
-		if ( starttime < stoptime) {
+		else if ( starttime < stoptime  && starttime != 0) {
 			timespent = timespent + Math.abs( ( parseInt(stoptime) - parseInt(starttime) ) / 1000 );
 			starttime = 0;			
 		}		
