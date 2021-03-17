@@ -78,6 +78,10 @@ class mobile {
             ));
         }
 
+        $modinfo = get_fast_modinfo($cm->course);
+        $cm_data = $modinfo->get_cm($cmid);
+        $cm_name = $cm_data->name;
+
         $data = [
             'cmid'    => $cmid,
             'wwwroot' => $CFG->wwwroot,
@@ -85,7 +89,7 @@ class mobile {
             'secret'  => urlencode($secret),
             'courseid' => $cm->course,
             'cm' => $cmid,
-            'cm_name' => $cm->name
+            'cm_name' => $cm_name
         ];
 
         return array(

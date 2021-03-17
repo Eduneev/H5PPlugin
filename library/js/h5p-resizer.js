@@ -263,7 +263,7 @@
     var courseid = parseInt(document.getElementById("extra-data").getAttribute('courseid'));
     var userid = parseInt(document.getElementById("extra-data").getAttribute('userid'));
     var cm = parseInt(document.getElementById("extra-data").getAttribute('cm'));
-    var cm_name = parseInt(document.getElementById("extra-data").getAttribute('cm_name'));
+    var cm_name = document.getElementById("extra-data").getAttribute('cm_name');
     		
 		var data = {
 			wstoken: 'b81f5e684fbf38b8af50ff0bf226f714',
