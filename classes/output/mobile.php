@@ -78,6 +78,7 @@ class mobile {
             ));
         }
 
+        /** CUSTOM CODE BY SANAT SHARMA */
         $modinfo = get_fast_modinfo($cm->course);
         $cm_data = $modinfo->get_cm($cmid);
         $cm_name = $cm_data->name;

@@ -1,3 +1,5 @@
+/* CUSTOM CODE Sanat SHARMA*/
+
 // H5P iframe Resizer
 (function () {
   if (!window.postMessage || !window.addEventListener || window.h5pResizerInitialized) {
@@ -275,7 +277,7 @@
       cm_name: cm_name
 		}
 		
-		var url = 'https://enlp.in/webservice/rest/server.php?' + 
+		var url = 'https://go.2learn.in/webservice/rest/server.php?' + 
 				'wstoken=' + data.wstoken + '&' +
         'wsfunction=' + data.wsfunction + '&' + 
         'moodlewsrestformat=json' + '&' +

@@ -32,9 +32,13 @@ if (document.documentElement.requestFullScreen) {
   H5P.fullScreenBrowserPrefix = '';
 }
 else if (document.documentElement.webkitRequestFullScreen) {
+
+  /** CUSTOM CODE SANAT SHARMA */
   //H5P.safariBrowser = navigator.userAgent.match(/version\/([.\d]+)/i);
   H5P.safariBrowser = navigator.userAgent.match(/Mac OS X.+Version\/([.\d]+)/);
   H5P.safariBrowser = (H5P.safariBrowser === null ? 0 : parseInt(H5P.safariBrowser[1]));
+
+  /** END OF CUSTOM CODE */
 
   // Do not allow fullscreen for safari < 7.
   if (H5P.safariBrowser === 0 || H5P.safariBrowser > 6) {
