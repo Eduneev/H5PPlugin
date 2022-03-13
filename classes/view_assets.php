@@ -100,20 +100,20 @@ class view_assets {
         global $PAGE;
 
         $safeparameters = $this->core->filterParameters($this->content);
-        //$decodedparams  = json_decode($safeparameters);
+        $decodedparams  = json_decode($safeparameters);
 
         // Added by lmsace.
         // Adding generico filter support.
-        $decodedparams  = json_decode($safeparameters, true);
-        $context = \context_module::instance($this->cm->id);
-        array_walk_recursive($decodedparams, function(&$item, $key) use ($context) {
+        //$decodedparams  = json_decode($safeparameters, true);
+        //$context = \context_module::instance($this->cm->id);
+        //array_walk_recursive($decodedparams, function(&$item, $key) use ($context) {
             // global $PAGE;
-            $filtermanager = \filter_manager::instance();
+        //    $filtermanager = \filter_manager::instance();
             // if (!is_array($item) && !is_object($item)) {
             // print_r($item);
-            $item = $filtermanager->filter_text($item, $context);
+        //    $item = $filtermanager->filter_text($item, $context);
             // }
-        });
+        //});
         // E.O of Custom Code - LMSACE.
 
         $hvpoutput      = $PAGE->get_renderer('mod_hvp');
@@ -280,8 +280,8 @@ class view_assets {
      * Logs activity viewed to completion criterias
      */
     public function logcompletioncriteriaviewed() {
-        $completion = new \completion_info($this->course);
-        $completion->set_module_viewed($this->cm);
+        //$completion = new \completion_info($this->course);
+        //$completion->set_module_viewed($this->cm);
     }
 
     /**
