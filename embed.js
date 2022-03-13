@@ -1,3 +1,4 @@
+/* eslint-disable require-jsdoc */
 /* global H5PEmbedCommunicator:true */
 /**
  * When embedded the communicator helps talk to the parent page.
@@ -102,7 +103,10 @@ document.onreadystatechange = function() {
     // When resize has been prepared tell parent window to resize.
     H5PEmbedCommunicator.on('resizePrepared', function() {
         H5PEmbedCommunicator.send('resize', {
-            scrollHeight: iFrame.contentDocument.body.scrollHeight
+            /** CODE EDITED BY SANAT SHARMA */
+            scrollHeight: getIframeBodyHeights(iFrame).scrollHeight
+            // eslint-disable-next-line capitalized-comments
+            // scrollHeight: iFrame.contentDocument.body.scrollHeight
         });
     });
 
@@ -120,12 +124,17 @@ document.onreadystatechange = function() {
         resizeDelay = setTimeout(function() {
             // Only resize if the iframe can be resized.
             if (parentIsFriendly) {
+                // CODE ADDED BY SANAT SHARMA
+                var heights = getIframeBodyHeights(iFrame);
                 H5PEmbedCommunicator.send('prepareResize',
                     {
-                        scrollHeight: iFrame.contentDocument.body.scrollHeight,
-                        clientHeight: iFrame.contentDocument.body.clientHeight
+                        scrollHeight: heights.scrollHeight,
+                        clientHeight: heights.clientHeight
+                        // scrollHeight: iFrame.contentDocument.body.scrollHeight,
+                        // clientHeight: iFrame.contentDocument.body.clientHeight
                     }
                 );
+                // Code change end
             } else {
                 H5PEmbedCommunicator.send('hello');
             }
@@ -135,3 +144,12 @@ document.onreadystatechange = function() {
     // Trigger initial resize for instance.
     H5P.trigger(instance, 'resize');
 };
+
+function getIframeBodyHeights(iFrame) {
+    var margin = parseInt(getComputedStyle(document.body)['margin'], 10) || 0;
+
+    return {
+        scrollHeight: iFrame.contentDocument.body.scrollHeight + margin * 2,
+        clientHeight: iFrame.contentDocument.body.clientHeight + margin * 2,
+    };
+}
