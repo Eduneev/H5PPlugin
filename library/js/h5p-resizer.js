@@ -7,8 +7,6 @@
   }
   window.h5pResizerInitialized = true;
 
-  console.log("ANY AT ALL LOGGING");
-
   // Map actions to handlers
   var actionHandlers = {};
 
@@ -42,8 +40,22 @@
     };
     window.addEventListener('resize', resize, false);
 
+    // CUSTOM CODE ADDED BY SANAT SHARMA
+    var courseid = parseInt(document.getElementById("extra-data").getAttribute('courseid'));
+    var userid = parseInt(document.getElementById("extra-data").getAttribute('userid'));
+    var cm = parseInt(document.getElementById("extra-data").getAttribute('cm'));
+    var cm_name = document.getElementById("extra-data").getAttribute('cm_name');
+    console.log("CM: " + cm);
+    console.log("course id: " + courseid);
+    var data = {
+      'courseid': courseid,
+      'userid': userid,
+      'cm': cm,
+      'cm_name': cm_name
+    };
+
     // Respond to let the iframe know we can resize it
-    respond('hello');
+    respond('hello', data);
   };
 
   /**
@@ -120,6 +132,11 @@
         if (data === undefined) {
           data = {};
         }
+
+        if (action == "hello") {
+          console.log("Hello action");
+        }
+
         data.action = action;
         data.context = 'h5p';
         event.source.postMessage(data, event.origin);

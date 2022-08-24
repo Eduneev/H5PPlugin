@@ -35,15 +35,17 @@ else if (document.documentElement.webkitRequestFullScreen) {
 
   /** CUSTOM CODE SANAT SHARMA */
   //H5P.safariBrowser = navigator.userAgent.match(/version\/([.\d]+)/i);
-  H5P.safariBrowser = navigator.userAgent.match(/Mac OS X.+Version\/([.\d]+)/);
-  H5P.safariBrowser = (H5P.safariBrowser === null ? 0 : parseInt(H5P.safariBrowser[1]));
-
-  /** END OF CUSTOM CODE */
+  //H5P.safariBrowser = navigator.userAgent.match(/Mac OS X.+Version\/([.\d]+)/);
+  //H5P.safariBrowser = (H5P.safariBrowser === null ? 0 : parseInt(H5P.safariBrowser[1]));
+  // This code has been changed to allow full screen in Moodle app.
+  H5P.fullScreenBrowserPrefix = 'webkit';
+  H5P.safariBrowser = 0;
 
   // Do not allow fullscreen for safari < 7.
-  if (H5P.safariBrowser === 0 || H5P.safariBrowser > 6) {
-    H5P.fullScreenBrowserPrefix = 'webkit';
-  }
+  //if (H5P.safariBrowser === 0 || H5P.safariBrowser > 6) {
+  //  H5P.fullScreenBrowserPrefix = 'webkit';
+  //}
+  /** END OF CUSTOM CODE */
 }
 else if (document.documentElement.mozRequestFullScreen) {
   H5P.fullScreenBrowserPrefix = 'moz';
