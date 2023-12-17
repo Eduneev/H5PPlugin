@@ -8,7 +8,7 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See th7
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
@@ -23,12 +23,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-//$plugin->version   = 2020020537;
-
-// TEMPORARY SOLUTION
-$plugin->version = 2021061114;
-$plugin->requires  = 2013051404;
+$plugin->version   = 2023061203;
+$plugin->requires  = 2013051403;
 $plugin->cron      = 0;
 $plugin->component = 'mod_hvp';
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = '1.20.2';
+$plugin->release   = '1.23.2';

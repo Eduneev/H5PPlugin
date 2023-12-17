@@ -1,5 +1,3 @@
-/* CUSTOM CODE Sanat SHARMA*/
-
 // H5P iframe Resizer
 (function () {
   if (!window.postMessage || !window.addEventListener || window.h5pResizerInitialized) {
@@ -19,7 +17,6 @@
    * @param {Function} respond Send a response to the iframe
    */
   actionHandlers.hello = function (iframe, data, respond) {
-
     // Make iframe responsive
     iframe.style.width = '100%';
 
@@ -40,11 +37,12 @@
     };
     window.addEventListener('resize', resize, false);
 
-    // CUSTOM CODE ADDED BY SANAT SHARMA
+    /**  CUSTOM CODE ADDED BY SANAT SHARMA */
     var courseid = parseInt(document.getElementById("extra-data").getAttribute('courseid'));
     var userid = parseInt(document.getElementById("extra-data").getAttribute('userid'));
     var cm = parseInt(document.getElementById("extra-data").getAttribute('cm'));
     var cm_name = document.getElementById("extra-data").getAttribute('cm_name');
+    
     console.log("CM: " + cm);
     console.log("course id: " + courseid);
     var data = {
@@ -56,6 +54,7 @@
 
     // Respond to let the iframe know we can resize it
     respond('hello', data);
+    /** END OF EDIT BY SANAT SHARMA */
   };
 
   /**
@@ -89,12 +88,6 @@
     // Resize iframe so all content is visible. Use scrollHeight to make sure we get everything
     iframe.style.height = data.scrollHeight + 'px';
   };
-
-  actionHandlers.initialized = function (iframe, data) {
-    //var outerFrame = iframe.contentWindow.document.getElementsByTagName('iframe')[0];
-    //console.log(outerFrame);
-    //WaitForIframeLoading(outerFrame);
-  }
 
   /**
    * Keyup event handler. Exits full screen on escape.
@@ -132,11 +125,6 @@
         if (data === undefined) {
           data = {};
         }
-
-        if (action == "hello") {
-          console.log("Hello action");
-        }
-
         data.action = action;
         data.context = 'h5p';
         event.source.postMessage(data, event.origin);

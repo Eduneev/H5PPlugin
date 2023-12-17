@@ -53,7 +53,7 @@ class mobile {
         if (!$course) {
             print_error('coursemisconf');
         }
-        require_course_login($course, true, $cm);
+        require_course_login($course, false, $cm, true, true);
         $context = context_module::instance($cm->id);
         require_capability('mod/hvp:view', $context);
 
@@ -103,5 +103,7 @@ class mobile {
             'javascript' => file_get_contents($CFG->dirroot . '/mod/hvp/library/js/h5p-resizer.js'),
             'otherdata' => array('userid' => $USER->id, 'courseid' => $cm->course, 'cm' => $cmid, 'cm_name' => $cm->name)
         );
+
+        /** END OF EDIT BY SANAT SHARMA */
     }
 }

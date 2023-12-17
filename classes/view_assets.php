@@ -101,21 +101,6 @@ class view_assets {
 
         $safeparameters = $this->core->filterParameters($this->content);
         $decodedparams  = json_decode($safeparameters);
-
-        // Added by lmsace.
-        // Adding generico filter support.
-        //$decodedparams  = json_decode($safeparameters, true);
-        //$context = \context_module::instance($this->cm->id);
-        //array_walk_recursive($decodedparams, function(&$item, $key) use ($context) {
-            // global $PAGE;
-        //    $filtermanager = \filter_manager::instance();
-            // if (!is_array($item) && !is_object($item)) {
-            // print_r($item);
-        //    $item = $filtermanager->filter_text($item, $context);
-            // }
-        //});
-        // E.O of Custom Code - LMSACE.
-
         $hvpoutput      = $PAGE->get_renderer('mod_hvp');
         $hvpoutput->hvp_alter_filtered_parameters(
             $decodedparams,
@@ -169,9 +154,15 @@ class view_assets {
 
         $root = self::getsiteroot();
         $embedurl = new \moodle_url("{$root}/mod/hvp/embed.php?id={$this->cm->id}");
+        $title = isset($this->content['metadata']['a11yTitle'])
+            ? $this->content['metadata']['a11yTitle']
+            : (isset($this->content['metadata']['title'])
+                ? $this->content['metadata']['title']
+                : ''
+            );
 
         return "<iframe src=\"{$embedurl->out()}\" width=\":w\" height=\":h\" frameborder=\"0\" " .
-               "allowfullscreen=\"allowfullscreen\"></iframe>";
+               "allowfullscreen=\"allowfullscreen\" title=\"{$title}\"></iframe>";
     }
 
     /**
@@ -280,8 +271,10 @@ class view_assets {
      * Logs activity viewed to completion criterias
      */
     public function logcompletioncriteriaviewed() {
+         /** EDITED BY SANAT SHARMA */
         //$completion = new \completion_info($this->course);
         //$completion->set_module_viewed($this->cm);
+        /** END EDIT BY SANAT SHARMA */
     }
 
     /**
@@ -325,6 +318,13 @@ class view_assets {
         if ($this->embedtype === 'div') {
             echo "<div class=\"h5p-content\" data-content-id=\"{$this->content['id']}\"></div>";
         } else {
+            $title = isset($this->content['metadata']['a11yTitle'])
+                ? $this->content['metadata']['a11yTitle']
+                : (isset($this->content['metadata']['title'])
+                    ? $this->content['metadata']['title']
+                    : ''
+                );
+
             echo "<div class=\"h5p-iframe-wrapper\">" .
                  "<iframe id=\"h5p-iframe-{$this->content['id']}\"" .
                  " class=\"h5p-iframe\"" .
@@ -332,7 +332,8 @@ class view_assets {
                  " style=\"height:1px\"" .
                  " src=\"about:blank\"" .
                  " frameBorder=\"0\"" .
-                 " scrolling=\"no\">" .
+                 " scrolling=\"no\"" .
+                 " title=\"{$title}\">" .
                  "</iframe>" .
                  "</div>";
         }
@@ -343,7 +344,7 @@ class view_assets {
      */
     public function validatecontent() {
         if ($this->content === null) {
-            print_error('invalidhvp');
+            print_error('invalidhvp', 'mod_hvp');
         }
     }
 
@@ -354,7 +355,7 @@ class view_assets {
      */
     public static function getsiteroot() {
         global $CFG;
-        // In Moodle 3.4 version wwwroot is always the same as httpswwwroot
+        // In Moodle 3.4 version wwwroot is always the same as httpswwwroot.
         if ($CFG->version < 2017111300) {
             return $CFG->httpswwwroot;
         }

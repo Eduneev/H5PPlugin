@@ -1,94 +1,75 @@
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+/*jshint multistr: true */
 
-define(['jquery', 'mod_hvp/communicator'], function($, H5PEmbedCommunicator) {
+/**
+ * Converts old script tag embed to iframe
+ */
+var H5POldEmbed = H5POldEmbed || (function () {
+  var head = document.getElementsByTagName('head')[0];
+  var resizer = false;
 
+  /**
+   * Loads the resizing script
+   */
+  var loadResizer = function (url) {
+    var data, callback = 'H5POldEmbed';
+    resizer = true;
 
-  // Wait for instances to be initialize.
-  $(document).ready(function() {
-      $('.h5p-iframe').ready(function() {
-          var iFrame = document.querySelector('.h5p-iframe');
-          var H5P = iFrame.contentWindow.H5P;
+    // Callback for when content data is loaded.
+    window[callback] = function (content) {
+      // Add resizing script to head
+      var resizer = document.createElement('script');
+      resizer.src = content;
+      head.appendChild(resizer);
 
-          // Check for H5P instances.
-          if (!H5P || !H5P.instances || !H5P.instances[0]) {
-              return;
-          }
+      // Clean up
+      head.removeChild(data);
+      delete window[callback];
+    };
 
-          var resizeDelay;
-          var instance = H5P.instances[0];
-          var parentIsFriendly = false;
+    // Create data script
+    data = document.createElement('script');
+    data.src = url + (url.indexOf('?') === -1 ? '?' : '&') + 'callback=' + callback;
+    head.appendChild(data);
+  };
 
-          // Handle that the resizer is loaded after the iframe.
-          H5PEmbedCommunicator.on('ready', function() {
-              H5PEmbedCommunicator.send('hello');
-          });
+  /**
+   * Replaced script tag with iframe
+   */
+  var addIframe = function (script) {
+    // Add iframe
+    var iframe = document.createElement('iframe');
+    iframe.src = script.getAttribute('data-h5p');
+    iframe.frameBorder = false;
+    iframe.allowFullscreen = true;
+    var parent = script.parentNode;
+    parent.insertBefore(iframe, script);
+    parent.removeChild(script);
+  };
 
-          // Handle hello message from our parent window.
-          H5PEmbedCommunicator.on('hello', function() {
+  /**
+   * Go throught all script tags with the data-h5p attribute and load content.
+   */
+  function H5POldEmbed() {
+    var scripts = document.getElementsByTagName('script');
+    var h5ps = []; // Use seperate array since scripts grow in size.
+    for (var i = 0; i < scripts.length; i++) {
+      var script = scripts[i];
+      if (script.src.indexOf('/h5p-resizer.js') !== -1) {
+        resizer = true;
+      }
+      else if (script.hasAttribute('data-h5p')) {
+        h5ps.push(script);
+      }
+    }
+    for (i = 0; i < h5ps.length; i++) {
+      if (!resizer) {
+        loadResizer(h5ps[i].getAttribute('data-h5p'));
+      }
+      addIframe(h5ps[i]);
+    }
+  }
 
-              // Initial setup/handshake is done.
-              parentIsFriendly = true;
+  return H5POldEmbed;
+})();
 
-              // Hide scrollbars for correct size.
-              iFrame.contentDocument.body.style.overflow = 'hidden';
-
-              document.body.classList.add('h5p-resizing');
-
-              // Content need to be resized to fit the new iframe size.
-              H5P.trigger(instance, 'resize');
-
-              H5P.trigger(instance, 'initialize');
-          });
-
-          // When resize has been prepared tell parent window to resize.
-          H5PEmbedCommunicator.on('resizePrepared', function() {
-              H5PEmbedCommunicator.send('resize', {
-                  scrollHeight: iFrame.contentDocument.body.scrollHeight
-              });
-          });
-
-          H5PEmbedCommunicator.on('resize', function() {
-              H5P.trigger(instance, 'resize');
-          });
-
-          H5P.on(instance, 'resize', function() {
-              if (H5P.isFullscreen) {
-                  return; // Skip iframe resize.
-              }
-
-              // Use a delay to make sure iframe is resized to the correct size.
-              clearTimeout(resizeDelay);
-              resizeDelay = setTimeout(function() {
-                  // Only resize if the iframe can be resized.
-                  if (parentIsFriendly) {
-                      H5PEmbedCommunicator.send('prepareResize',
-                          {
-                              scrollHeight: iFrame.contentDocument.body.scrollHeight,
-                              clientHeight: iFrame.contentDocument.body.clientHeight
-                          }
-                      );
-                  } else {
-                      H5PEmbedCommunicator.send('hello');
-                  }
-              }, 0);
-          });
-
-          // Trigger initial resize for instance.
-          H5P.trigger(instance, 'resize');
-      });
-  });
-
-});
+new H5POldEmbed();
